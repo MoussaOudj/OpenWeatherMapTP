@@ -69,6 +69,92 @@ Open Weather Map permet de récupérer des données météorologique à travers 
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/schema-com.png" width="800" height="300" />
 </p>
 
-## Code
+## Code & Config
+
+
+### Envoi des données NODE JS
+
+>Fonction refresh (envoi des données tout les x ms)
+> Publication dans les divers topic correspondant
+```
+function refreshTemp(refreshInterval){
+    setInterval(() => {
+        console.log('REFRESH TEMP FROM OPENWEATHER')
+        var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=Paris&appid=50cc7473f07324492c8cd1c8328c5553&units=metric'
+        rest('GET',requestUrl)
+           .end(function(res){
+               if(res.error)
+                   throw new Error(res.error)
+               var response = JSON.parse(res.raw_body);
+               client.publish('weather-station/group5/server/temperature',response.main.temp.toString())
+               client.publish('weather-station/group5/server/humidity',response.main.humidity.toString())
+               client.publish('weather-station/group5/server/pressure',response.main.pressure.toString())
+               client.publish('weather-station/group5/server/weather',response.weather[0].description.toString())
+               client.publish('weather-station/group5/server/visibility',response.visibility.toString())
+               client.publish('weather-station/group5/server/wind/speed',response.wind.speed.toString())
+               client.publish('weather-station/group5/server/wind/direction',response.wind.deg.toString())
+               client.publish('weather-station/group5/server/light',between(0,100000).toString())
+               client.publish('weather-station/group5/server/rain/level/lastDay',between(0,3).toString())
+               client.publish('weather-station/group5/server/rain/level/lastHour',between(0,5).toString())
+           })
+           var requestHourlyUrl = 'http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.8534&lon=2.3488&dt=1626252353&appid=50cc7473f07324492c8cd1c8328c5553&units=metric'
+           rest('GET',requestHourlyUrl)
+              .end(function(res){
+                  if(res.error)
+                      throw new Error(res.error)
+                  var response = JSON.parse(res.raw_body);
+                  client.publish('weather-station/group5/server/uvi',response.current.uvi.toString())
+              })
+    },refreshInterval);
+}
+
+```
+
+### Config Weather Station | MQTT-THING Plugin
+
+>Configuration coté HomeBridge
+> Avec le plugin mqtt-thing on a pue setup la weather station.
+```
+"accessory": "mqttthing",
+            "type": "weatherStation",
+            "name": "weather api",
+            "serviceNames": {
+                "temperature": "Temperature",
+                "humidity": "Humidity",
+                "airPressure": "Air Pressure",
+                "weather": "Weather"
+            },
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "caption": "Weather Station",
+            "topics": {
+                "getCurrentTemperature": "weather-station/group5/server/temperature",
+                "getCurrentRelativeHumidity": "weather-station/group5/server/humidity",
+                "getCurrentAmbientLightLevel": "weather-station/group5/server/light",
+                "getAirPressure": "weather-station/group5/server/pressure",
+                "getRain1h": "weather-station/group5/server/rain/level/lastHour",
+                "getRain24h": "weather-station/group5/server/rain/level/lastDay",
+                "getUVIndex": "weather-station/group5/server/uvi",
+                "getWeatherCondition": "weather-station/group5/server/weather",
+                "getVisibility": "weather-station/group5/server/visibility",
+                "getWindDirection": "weather-station/group5/server/wind/direction",
+                "getWindSpeed": "weather-station/group5/server/wind/speed",
+                "getStatusActive": "weather-station/group5/server/isActive",
+                "getStatusFault": "weather-station/group5/server/isFault",
+                "getStatusTampered": "weather-station/group5/server/isTampered",
+                "getStatusLowBattery": "weather-station/group5/server/isLowBattery"
+            }
+        }
+```
 
 ## Resultat
+
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.png"  />
+</p>
+
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.png"  />
+</p>
+
