@@ -150,6 +150,5 @@ function refreshTemp(refreshInterval){
 
 ## Resultat
 
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.PNG" width="300" height="900" />
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.PNG" width="300" height="900" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.PNG" width="300" height="900" /> <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.PNG" width="300" height="900" />
 
