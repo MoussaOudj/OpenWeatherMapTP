@@ -66,7 +66,7 @@ Open Weather Map permet de récupérer des données météorologique à travers 
 ## Schéma de communication
 
 <p align="center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/schema.png" width="800" height="300" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/schema-com.png" width="800" height="300" />
 </p>
 
 ## Code
