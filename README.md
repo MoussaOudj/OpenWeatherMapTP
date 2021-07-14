@@ -9,9 +9,9 @@ Le TP a pour but de nous apprendre comment fonctionne le protocole MQTT en passa
 
 ###### Raspberry PI
 
-<div style="text-align:center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Raspberry.jpg" width="250" height="250">
-</div>
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Raspberry.jpg" width="250" height="250" />
+</p>
 
 ![Image of Raspberry](https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Raspberry.jpg)
 
