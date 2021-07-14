@@ -24,7 +24,7 @@ Portainer s’installe comme un conteneur docker pour simplifier sont déploieme
 Dans notre cas nous l'utilision pour visualiser et gérer nos deux containers : Mosquitto et HomeBridge
 
 <p align="center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/PortainerExemple.png" width="250" height="250" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/PortainerExemple.png" width="600" height="250" />
 </p>
 
 > Ci-dessus la fenêtre de gestion de containers
