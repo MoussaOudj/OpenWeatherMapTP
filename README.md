@@ -113,7 +113,7 @@ function refreshTemp(refreshInterval){
 ### Config Weather Station | MQTT-THING Plugin
 
 >Configuration coté HomeBridge
-> Avec le plugin mqtt-thing on a pue setup la weather station.
+> Avec le plugin mqtt-thing on a pu setup la weather station.
 ```
 "accessory": "mqttthing",
             "type": "weatherStation",
