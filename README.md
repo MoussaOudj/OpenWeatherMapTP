@@ -54,8 +54,14 @@ Le container Homebridge nous permet d'intégrer à des appareils domestiques int
 
 ### Open Weather Map API
 
+Open Weather Map permet de récupérer des données météorologique à travers le monde. On peut recupérer la température, la vitesse du vent et même les données des jours à venirs.
 
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/openweather.png" width="250" height="250" />
+</p>
 
+>Ci dessous un exemple de requêtes avec notre clé API : 
+> http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.8534&lon=2.3488&dt=1626252353&appid=50cc7473f07324492c8cd1c8328c5553&units=metric
 
 ## Schéma de communication
 
