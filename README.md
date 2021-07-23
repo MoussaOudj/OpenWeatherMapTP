@@ -1,5 +1,5 @@
 # OPEN WEATHER - MQTT (TP)
-###### Cindy NGUYEN | Moussa OUDJAMA | Leo VIDAL | 4MOC
+###### Moussa OUDJAMA | 4MOC
 
 ## Objectif 
 
