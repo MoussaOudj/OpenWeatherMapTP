@@ -319,15 +319,3 @@ Coté HomeBridge il a fallu ajouter un objet led RGB, mais la spécificité éta
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led_app.PNG" width="200" height="400"  />
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.PNG" width="200" height="400" />
 </p>
-
-
-
-## Ajout de divers composants mqtt-thing
-
-
-
-## Resultat Led
-
-
-
-
