@@ -194,6 +194,11 @@ Pour cela j'ai eu besoin d'ajouter une ESP au projet ainsin que la fameuse led r
 
 Pour que la led fonctionne normalement il m'a fallu écrire un code sur Arduino pour gérer l'état de celle - ci. Le plus important est de récupérer les informations des topics. Pour avoir plus de détails le code ce trouve [ICI](https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/led_rgb_arduino/rgb_led_mqtt/rgb_led_mqtt.ino)
 
+>Exemple de log
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/LOG_ARDUINO.PNG" width="250" height="250" />
+</p>
+
 ### Code node.js led RGB
 
 >Subscribe du topic + initialisation topic à off avec le payload en JSON
