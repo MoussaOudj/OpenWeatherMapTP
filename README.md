@@ -196,7 +196,7 @@ Pour que la led fonctionne normalement il m'a fallu écrire un code sur Arduino 
 
 >Exemple de log
 <p align="center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/LOG_ARDUINO.PNG" width="250" height="250" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/LOG_ARDUINO.png" width="500" height="300" />
 </p>
 
 ### Code node.js led RGB
