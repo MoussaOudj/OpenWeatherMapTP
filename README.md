@@ -174,7 +174,7 @@ function refreshOpenWeatherData(refreshInterval){
 ## Resultat Weather Station
 
 <p align="center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.PNG" width="300" height="900" /> <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.PNG" width="300" height="900" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.PNG" width="200" height="400" /> <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.PNG" width="200" height="400" />
 </p>
 
 
@@ -311,8 +311,8 @@ Coté HomeBridge il a fallu ajouter un objet led RGB, mais la spécificité éta
 
 <p align="center">
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/RGB_Temperature_app.PNG" width="200" height="400" />
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.PNG" width="200" height="400" />
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led_app.PNG" width="200" height="400"  />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.PNG" width="200" height="400" />
 </p>
 
 
