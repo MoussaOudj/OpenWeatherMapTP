@@ -310,9 +310,9 @@ Coté HomeBridge il a fallu ajouter un objet led RGB, mais la spécificité éta
 </p>
 
 <p align="center">
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/RGB_Temperature_app.PNG" width="150" height="600" />
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.PNG" width="150" height="600" />
-<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led_app.PNG" width="150" height="600" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/RGB_Temperature_app.PNG" width="200" height="400" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.PNG" width="200" height="400" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led_app.PNG" width="200" height="400"  />
 </p>
 
 
