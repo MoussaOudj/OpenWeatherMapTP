@@ -1,0 +1,129 @@
+{
+    "bridge": {
+        "name": "Homebridge EF25",
+        "username": "0E:A7:C5:77:EF:30",
+        "port": 52178,
+        "pin": "033-45-155"
+    },
+    "accessories": [
+        {
+            "type": "motionSensor",
+            "name": "ShockSensor",
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "topics": {
+                "getMotionDetected": "4moc/groupe5/shock/status"
+            },
+            "integerValue": true,
+            "onValue": "1",
+            "offValue": "0",
+            "turnOffAfterms": 5000,
+            "accessory": "mqttthing"
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "temperatureSensor",
+            "name": "Water level sensor",
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "topics": {
+                "getCurrentTemperature": "4moc/groupe5/water/level/value",
+                "getStatusActive": "4moc/groupe5/water/level/status",
+                "getStatusFault": "4moc/groupe5/water/level/status",
+                "getStatusTampered": "4moc/groupe5/water/level/status",
+                "getStatusLowBattery": "4moc/groupe5/water/level/status"
+            },
+            "minTemperature": 0,
+            "maxTemperature": 30
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "lightbulb",
+            "name": "RGB_Elgoo_Led",
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "topics": {
+                "getOn": "4moc/groupe5/led/status",
+                "setOn": "4moc/groupe5/led/status",
+                "getRGB": "4moc/groupe5/led/rgb",
+                "setRGB": "4moc/groupe5/led/rgb"
+            },
+            "integerValue": true,
+            "onValue": "On",
+            "offValue": "Off",
+            "hex": false,
+            "hexPrefix": false,
+            "minColorTemperature": 0,
+            "maxColorTemperature": 255
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "weatherStation",
+            "name": "weather api",
+            "serviceNames": {
+                "temperature": "Temperature",
+                "humidity": "Humidity",
+                "airPressure": "Air Pressure",
+                "weather": "Weather"
+            },
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "caption": "Weather Station",
+            "topics": {
+                "getCurrentTemperature": "weather-station/moussa/server/temperature",
+                "getCurrentRelativeHumidity": "weather-station/moussa/server/humidity",
+                "getCurrentAmbientLightLevel": "weather-station/moussa/server/light",
+                "getAirPressure": "weather-station/moussa/server/pressure",
+                "getRain1h": "weather-station/moussa/server/rain/level/lastHour",
+                "getRain24h": "weather-station/moussa/server/rain/level/lastDay",
+                "getUVIndex": "weather-station/moussa/server/uvi",
+                "getWeatherCondition": "weather-station/moussa/server/weather",
+                "getVisibility": "weather-station/moussa/server/visibility",
+                "getWindDirection": "weather-station/moussa/server/wind/direction",
+                "getWindSpeed": "weather-station/moussa/server/wind/speed",
+                "getStatusActive": "weather-station/moussa/server/isActive",
+                "getStatusFault": "weather-station/moussa/server/isFault",
+                "getStatusTampered": "weather-station/moussa/server/isTampered",
+                "getStatusLowBattery": "weather-station/moussa/server/isLowBattery"
+            }
+        },
+        {
+            "accessory": "mqttthing",
+            "type": "lightbulb",
+            "name": "RGB_Temperature",
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "topics": {
+                "getOn": {
+                    "topic": "weather-station/moussa/control/rgb/status",
+                    "apply": "return JSON.parse(message).status;"
+                },
+                "setOn": {
+                    "topic": "weather-station/moussa/control/rgb/status",
+                    "apply": "return JSON.stringify({status: (message)})"
+                },
+                "getRGB": "weather-station/moussa/control/rgb",
+                "setRGB": "weather-station/moussa/control/rgb"
+            },
+            "integerValue": true,
+            "onValue": "On",
+            "offValue": "Off",
+            "hex": false,
+            "hexPrefix": false,
+            "minColorTemperature": 0,
+            "maxColorTemperature": 255
+        }
+    ],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8181,
+            "platform": "config"
+        }
+    ]
+}
