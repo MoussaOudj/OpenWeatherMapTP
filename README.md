@@ -192,34 +192,42 @@ Pour cela j'ai eu besoin d'ajouter une ESP au projet ainsin que la fameuse led r
 
 ### Code arduino led RGB
 
-Pour que la led fonctionne normalement il m'a fallu écrire un code sur Arduino pour gérer l'état de celle - ci. Le plus important est de récupérer les informations des topics. Pour avoir plus de détails le code ce trouve ici : [Mettre un lien hypertexte]
+Pour que la led fonctionne normalement il m'a fallu écrire un code sur Arduino pour gérer l'état de celle - ci. Le plus important est de récupérer les informations des topics. Pour avoir plus de détails le code ce trouve [ICI](https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/led_rgb_arduino/rgb_led_mqtt/rgb_led_mqtt.ino)
 
 ### Code node.js led RGB
 
 >Subscribe du topic + initialisation topic à off avec le payload en JSON
-``client.on('connect', function() {
+```
+client.on('connect', function() {
 console.log('CONNECTED')
 //subscribe au topic rgb status
 client.subscribe('weather-station/moussa/control/rgb/status')
 //initialise rgb status à off
 client.publish('weather-station/moussa/control/rgb/status',"{\"status\": \"Off\"}")
-})``
+})
+```
+
 
 >Requête pour modifier le status (faisable avec postman)
-``app.post('/set-rgb-status',(req,res,next)=> {
+```
+app.post('/set-rgb-status',(req,res,next)=> {
      console.log("ENVOI")
      var body = JSON.stringify(req.body)
      console.log(body)
      client.publish('weather-station/moussa/control/rgb/status',body)
      res.send()
- })``
+ })
+```
  >Exemple de body
- ``{
+ ```
+ {
  "status": "On"
-}``
+}
+```
 
 >Reception du message status (parsing du payload)
-``//Reception des messages
+```
+//Reception des messages
     client.on('message', function(topic, message){
         //Gestion topic rgb status
         if(topic == 'weather-station/moussa/control/rgb/status'){
@@ -228,10 +236,12 @@ client.publish('weather-station/moussa/control/rgb/status',"{\"status\": \"Off\"
             RGB_STATUS = jsonStatusPayload.status.toString()
             console.log('new status payload RGB: ' + RGB_STATUS)
         }
-    })``
+    })
+```
 
 >Envoi de la couleur sur topic selon la temperature 
-``//Si la led est allumé alors gérer la couleur
+```
+//Si la led est allumé alors gérer la couleur
     if(RGB_STATUS == 'On'){
         console.log('temperature : '+temp)
         if(temp >= 25){ 
@@ -241,7 +251,8 @@ client.publish('weather-station/moussa/control/rgb/status',"{\"status\": \"Off\"
             console.log('temp inferieur rgb bleu')
             client.publish('weather-station/moussa/control/rgb','0,0,50')
         }
-    }``
+    }
+```
     
 ### Config HomeBridge led RGB
 
@@ -279,14 +290,31 @@ Coté HomeBridge il a fallu ajouter un objet led RGB, mais la spécificité éta
 ```
 
 >Parsing On/Off en JSON
-`` "getOn": {
+```
+"getOn": {
 "topic": "weather-station/moussa/control/rgb/status",
 "apply": "return JSON.parse(message).status;"
 },
 "setOn": {
 "topic": "weather-station/moussa/control/rgb/status",
 "apply": "return JSON.stringify({status: (message)})"
-} ``
+}
+```
+
+### Resultat LED RGB
+
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led.jpg" width="250" height="250" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led.jpg" width="250" height="250" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Exemple.jpg" width="250" height="250" />
+</p>
+
+<p align="center">
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/RGB_Temperature_app.png" width="300" height="900" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/blue_led_app.png" width="300" height="900" />
+<img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/red_led_app.png" width="300" height="900" />
+</p>
+
 
 
 ## Ajout de divers composants mqtt-thing
