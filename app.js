@@ -30,12 +30,11 @@ var RGB_STATUS = 'Off'
 
 
 client.on('connect', function() {
-    console.log('CONNECTED')
+console.log('CONNECTED')
 //subscribe au topic rgb status
 client.subscribe('weather-station/moussa/control/rgb/status')
 //initialise rgb status à off
 client.publish('weather-station/moussa/control/rgb/status',"{\"status\": \"Off\"}")
-
 })
 
 //Reception des messages

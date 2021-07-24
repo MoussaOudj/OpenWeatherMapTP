@@ -76,8 +76,11 @@ Open Weather Map permet de récupérer des données météorologique à travers 
 
 >Fonction refresh (envoi des données tout les x ms)
 > Publication dans les divers topic correspondant
+> (gestion led expliqué plus tard)
 ```
-function refreshTemp(refreshInterval){
+function refreshOpenWeatherData(refreshInterval){
+    //init variable temperature pour controler led rgb
+    var temp = 0
     setInterval(() => {
         console.log('REFRESH TEMP FROM OPENWEATHER')
         var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=Paris&appid=50cc7473f07324492c8cd1c8328c5553&units=metric'
@@ -86,25 +89,45 @@ function refreshTemp(refreshInterval){
                if(res.error)
                    throw new Error(res.error)
                var response = JSON.parse(res.raw_body);
-               client.publish('weather-station/group5/server/temperature',response.main.temp.toString())
-               client.publish('weather-station/group5/server/humidity',response.main.humidity.toString())
-               client.publish('weather-station/group5/server/pressure',response.main.pressure.toString())
-               client.publish('weather-station/group5/server/weather',response.weather[0].description.toString())
-               client.publish('weather-station/group5/server/visibility',response.visibility.toString())
-               client.publish('weather-station/group5/server/wind/speed',response.wind.speed.toString())
-               client.publish('weather-station/group5/server/wind/direction',response.wind.deg.toString())
-               client.publish('weather-station/group5/server/light',between(0,100000).toString())
-               client.publish('weather-station/group5/server/rain/level/lastDay',between(0,3).toString())
-               client.publish('weather-station/group5/server/rain/level/lastHour',between(0,5).toString())
+               temp = response.main.temp
+               client.publish('weather-station/moussa/server/temperature',temp.toString())
+               client.publish('weather-station/moussa/server/humidity',response.main.humidity.toString())
+               client.publish('weather-station/moussa/server/pressure',response.main.pressure.toString())
+               client.publish('weather-station/moussa/server/weather',response.weather[0].description.toString())
+               client.publish('weather-station/moussa/server/visibility',response.visibility.toString())
+               client.publish('weather-station/moussa/server/wind/speed',response.wind.speed.toString())
+               client.publish('weather-station/moussa/server/wind/direction',response.wind.deg.toString())
+               //Les données sont introuvable sur openweather donc elles sont simulé 
+               client.publish('weather-station/moussa/server/light',between(0,100000).toString())
+               client.publish('weather-station/moussa/server/rain/level/lastDay',between(0,3).toString())
+               client.publish('weather-station/moussa/server/rain/level/lastHour',between(0,5).toString())
            })
-           var requestHourlyUrl = 'http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.8534&lon=2.3488&dt=1626252353&appid=50cc7473f07324492c8cd1c8328c5553&units=metric'
-           rest('GET',requestHourlyUrl)
+        
+           //Timestamp utile à la requête
+           var timestamp = Math.round(new Date().getTime() / 1000) - 1000 ;
+           //La donnée UVI était disponible que avec cette requete
+           var requestWithUvi = 'http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=48.8534&lon=2.3488&dt='+timestamp+'&appid=50cc7473f07324492c8cd1c8328c5553&units=metric'
+           console.log(requestWithUvi)
+           rest('GET',requestWithUvi)
               .end(function(res){
                   if(res.error)
                       throw new Error(res.error)
                   var response = JSON.parse(res.raw_body);
-                  client.publish('weather-station/group5/server/uvi',response.current.uvi.toString())
+                  client.publish('weather-station/moussa/server/uvi',response.current.uvi.toString())
               })
+
+              //Si la led est allumé alors gérer la couleur
+              if(RGB_STATUS == 'On'){
+                console.log('temperature : '+temp)
+                if(temp >= 25){ 
+                    console.log('temp superieur rgb rouge')
+                    client.publish('weather-station/moussa/control/rgb','50,0,0')
+                }else {
+                  console.log('temp inferieur rgb bleu')
+                    client.publish('weather-station/moussa/control/rgb','0,0,50')
+                }
+              }
+    
     },refreshInterval);
 }
 
@@ -113,7 +136,7 @@ function refreshTemp(refreshInterval){
 ### Config Weather Station | MQTT-THING Plugin
 
 >Configuration coté HomeBridge
-> Avec le plugin mqtt-thing on a pu setup la weather station.
+> Avec le plugin mqtt-thing la config setup de la weather station.
 ```
 "accessory": "mqttthing",
             "type": "weatherStation",
@@ -148,9 +171,130 @@ function refreshTemp(refreshInterval){
         }
 ```
 
-## Resultat
+## Resultat Weather Station
 
 <p align="center">
 <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/weather_station.PNG" width="300" height="900" /> <img src="https://github.com/MoussaOudj/OpenWeatherMapTP/blob/master/readme_ressources/Capteurs.PNG" width="300" height="900" />
 </p>
+
+
+# Bonus 
+
+
+## Ajout gestion led RGB selon la temperature
+
+En bonus j'ai ajouté la gestion d'une led rgb selon la temperature, si la temperature atteind les 25 degrès ou plus alors la led est en rouge, sinon elle sera en bleu. 
+Pour cela j'ai eu besoin d'ajouter une ESP au projet ainsin que la fameuse led rgb, il y aura par la suite des modification niveau homebridge.
+
+2 topics sont utile pour la gestion de la led : 
+- Le topic qui gère les couleurs qui sera alimenté avec les données RGB
+- Le topic qui gère le status on/off qui sera alimenté avec un payload en JSON
+
+### Code arduino led RGB
+
+Pour que la led fonctionne normalement il m'a fallu écrire un code sur Arduino pour gérer l'état de celle - ci. Le plus important est de récupérer les informations des topics. Pour avoir plus de détails le code ce trouve ici : [Mettre un lien hypertexte]
+
+### Code node.js led RGB
+
+>Subscribe du topic + initialisation topic à off avec le payload en JSON
+``client.on('connect', function() {
+console.log('CONNECTED')
+//subscribe au topic rgb status
+client.subscribe('weather-station/moussa/control/rgb/status')
+//initialise rgb status à off
+client.publish('weather-station/moussa/control/rgb/status',"{\"status\": \"Off\"}")
+})``
+
+>Requête pour modifier le status (faisable avec postman)
+``app.post('/set-rgb-status',(req,res,next)=> {
+     console.log("ENVOI")
+     var body = JSON.stringify(req.body)
+     console.log(body)
+     client.publish('weather-station/moussa/control/rgb/status',body)
+     res.send()
+ })``
+ >Exemple de body
+ ``{
+ "status": "On"
+}``
+
+>Reception du message status (parsing du payload)
+``//Reception des messages
+    client.on('message', function(topic, message){
+        //Gestion topic rgb status
+        if(topic == 'weather-station/moussa/control/rgb/status'){
+            jsonStatusPayload = JSON.parse(message)
+            console.log(jsonStatusPayload)
+            RGB_STATUS = jsonStatusPayload.status.toString()
+            console.log('new status payload RGB: ' + RGB_STATUS)
+        }
+    })``
+
+>Envoi de la couleur sur topic selon la temperature 
+``//Si la led est allumé alors gérer la couleur
+    if(RGB_STATUS == 'On'){
+        console.log('temperature : '+temp)
+        if(temp >= 25){ 
+            console.log('temp superieur rgb rouge')
+            client.publish('weather-station/moussa/control/rgb','50,0,0')
+        }else {
+            console.log('temp inferieur rgb bleu')
+            client.publish('weather-station/moussa/control/rgb','0,0,50')
+        }
+    }``
+    
+### Config HomeBridge led RGB
+
+Coté HomeBridge il a fallu ajouter un objet led RGB, mais la spécificité était de parser le JSON on niveau de la gestion du On/Off 
+
+>Config rgb led temperature  
+```
+"accessory": "mqttthing",
+            "type": "lightbulb",
+            "name": "RGB_Temperature",
+            "url": "mqtt://localhost:1883",
+            "username": "esgi",
+            "password": "esgi4moc",
+            "topics": {
+                "getOn": {
+                    "topic": "weather-station/moussa/control/rgb/status",
+                    "apply": "return JSON.parse(message).status;"
+                },
+                "setOn": {
+                    "topic": "weather-station/moussa/control/rgb/status",
+                    "apply": "return JSON.stringify({status: (message)})"
+                },
+                "getRGB": "weather-station/moussa/control/rgb",
+                "setRGB": "weather-station/moussa/control/rgb"
+            },
+            "integerValue": true,
+            "onValue": "On",
+            "offValue": "Off",
+            "hex": false,
+            "hexPrefix": false,
+            "minColorTemperature": 0,
+            "maxColorTemperature": 255
+        }
+
+```
+
+>Parsing On/Off en JSON
+`` "getOn": {
+"topic": "weather-station/moussa/control/rgb/status",
+"apply": "return JSON.parse(message).status;"
+},
+"setOn": {
+"topic": "weather-station/moussa/control/rgb/status",
+"apply": "return JSON.stringify({status: (message)})"
+} ``
+
+
+## Ajout de divers composants mqtt-thing
+
+
+
+## Resultat Led
+
+
+
 
